@@ -92,15 +92,12 @@ mixin OidcDesktop on OidcPlatform {
   @override
   Future<OidcAuthorizeResponse?> getAuthorizationResponse(
     OidcProviderMetadata metadata,
+    AuthorizationType authorizationType,
     OidcAuthorizeRequest request,
     OidcPlatformSpecificOptions options,
   ) async {
-    final authEndpoint = metadata.authorizationEndpoint;
-    if (authEndpoint == null) {
-      throw const OidcException(
-        "The OpenId Provider doesn't provide the authorizationEndpoint",
-      );
-    }
+    final authEndpoint = metadata
+        .selectAuthorizationEndpointByAuthorizationType(authorizationType);
     final redirectUriCompleter = Completer<Uri>();
     final responseUri = await startListenerAndGetUri(
       originalRedirectUri: request.redirectUri,

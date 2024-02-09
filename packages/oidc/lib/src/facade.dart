@@ -27,11 +27,13 @@ class OidcFlutter {
   static Future<OidcAuthorizeResponse?> getPlatformAuthorizationResponse({
     required OidcProviderMetadata metadata,
     required OidcAuthorizeRequest request,
+    required AuthorizationType authorizationType,
     OidcPlatformSpecificOptions options = const OidcPlatformSpecificOptions(),
   }) async {
     try {
       return _platform.getAuthorizationResponse(
         metadata,
+        authorizationType,
         request,
         options,
       );

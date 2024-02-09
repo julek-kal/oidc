@@ -1,3 +1,4 @@
+export 'authorization_type.dart';
 export 'req.dart';
 export 'resp.dart';
 export 'simple_code_flow_request.dart';

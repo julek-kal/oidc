@@ -34,6 +34,7 @@ abstract class OidcPlatform extends PlatformInterface {
   /// may throw an [OidcException].
   Future<OidcAuthorizeResponse?> getAuthorizationResponse(
     OidcProviderMetadata metadata,
+    AuthorizationType authorizationType,
     OidcAuthorizeRequest request,
     OidcPlatformSpecificOptions options,
   );
@@ -66,6 +67,7 @@ class NoOpOidcPlatform extends OidcPlatform {
   @override
   Future<OidcAuthorizeResponse?> getAuthorizationResponse(
     OidcProviderMetadata metadata,
+    AuthorizationType authorizationType,
     OidcAuthorizeRequest request,
     OidcPlatformSpecificOptions options,
   ) {

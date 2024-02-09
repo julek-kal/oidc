@@ -26,16 +26,12 @@ mixin OidcFlutterAppauth on OidcPlatform {
   @override
   Future<OidcAuthorizeResponse?> getAuthorizationResponse(
     OidcProviderMetadata metadata,
+    AuthorizationType authorizationType,
     OidcAuthorizeRequest request,
     OidcPlatformSpecificOptions options,
   ) async {
-    final authorizationEndpoint = metadata.authorizationEndpoint;
-    if (authorizationEndpoint == null) {
-      throw const OidcException(
-        'OIDC provider MUST declare an '
-        'authorization endpoint and a token endpoint',
-      );
-    }
+    final authorizationEndpoint = metadata
+        .selectAuthorizationEndpointByAuthorizationType(authorizationType);
     final resp = await appAuth.authorize(
       AuthorizationRequest(
         request.clientId,

@@ -2,6 +2,7 @@
 
 import 'dart:async';
 import 'dart:html';
+
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 import 'package:oidc_core/oidc_core.dart';
@@ -157,15 +158,12 @@ class OidcWeb extends OidcPlatform {
   @override
   Future<OidcAuthorizeResponse?> getAuthorizationResponse(
     OidcProviderMetadata metadata,
+    AuthorizationType authorizationType,
     OidcAuthorizeRequest request,
     OidcPlatformSpecificOptions options,
   ) async {
-    final endpoint = metadata.authorizationEndpoint;
-    if (endpoint == null) {
-      throw const OidcException(
-        "The OpenId Provider doesn't provide '${OidcConstants_ProviderMetadata.authorizationEndpoint}'",
-      );
-    }
+    final endpoint = metadata
+        .selectAuthorizationEndpointByAuthorizationType(authorizationType);
     final isNonePrompt =
         request.prompt?.contains(OidcConstants_AuthorizeRequest_Prompt.none) ??
             false;

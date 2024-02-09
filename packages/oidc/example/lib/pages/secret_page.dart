@@ -57,7 +57,7 @@ class _SecretPageState extends State<SecretPage> {
                 onPressed: () async {
                   try {
                     final res = await app_state.currentManager
-                        .loginAuthorizationCodeFlow(
+                        .initializeAuthorizationCodeFlow(
                       // you can change scope too!
                       scopeOverride: [
                         ...app_state.currentManager.settings.scope,

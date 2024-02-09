@@ -126,8 +126,8 @@ class _AuthPageState extends State<AuthPage> {
             onPressed: () async {
               final messenger = ScaffoldMessenger.of(context);
               try {
-                final result =
-                    await app_state.currentManager.loginAuthorizationCodeFlow(
+                final result = await app_state.currentManager
+                    .initializeAuthorizationCodeFlow(
                   originalUri: parsedOriginalUri ?? Uri.parse('/'),
                   //store any arbitrary data, here we store the authorization
                   //start time.
@@ -168,7 +168,8 @@ class _AuthPageState extends State<AuthPage> {
               final messenger = ScaffoldMessenger.of(context);
 
               // ignore: deprecated_member_use
-              final result = await app_state.currentManager.loginImplicitFlow(
+              final result =
+                  await app_state.currentManager.initializeImplicitFlow(
                 responseType: OidcConstants_AuthorizationEndpoint_ResponseType
                     .idToken_Token,
                 originalUri: parsedOriginalUri ?? Uri.parse('/'),

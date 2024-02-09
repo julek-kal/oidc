@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:jose_plus/jose.dart';
@@ -101,7 +102,8 @@ class OidcUserManager {
   ///
   /// [originalUri] is the uri you want to be redirected to after authentication is done,
   /// if null, it defaults to `redirectUri`.
-  Future<OidcUser?> loginAuthorizationCodeFlow({
+  Future<OidcUser?> initializeAuthorizationCodeFlow({
+    AuthorizationType type = AuthorizationType.login,
     Uri? redirectUriOverride,
     Uri? originalUri,
     List<String>? scopeOverride,
@@ -161,6 +163,7 @@ class OidcUserManager {
     );
     return _tryGetAuthResponse(
       grantType: OidcConstants_GrantType.authorizationCode,
+      authorizationType: type,
       request: requestContainer.request,
       options: options,
     );
@@ -199,12 +202,14 @@ class OidcUserManager {
 
   Future<OidcUser?> _tryGetAuthResponse({
     required OidcAuthorizeRequest request,
+    required AuthorizationType authorizationType,
     required String grantType,
     required OidcPlatformSpecificOptions options,
   }) async {
     try {
       final response = await OidcFlutter.getPlatformAuthorizationResponse(
         metadata: discoveryDocument,
+        authorizationType: authorizationType,
         request: request,
         options: options,
       );
@@ -238,8 +243,9 @@ class OidcUserManager {
 
   ///
   @Deprecated('Implicit flow is deprecated due to security reasons.')
-  Future<OidcUser?> loginImplicitFlow({
+  Future<OidcUser?> initializeImplicitFlow({
     required List<String> responseType,
+    AuthorizationType type = AuthorizationType.login,
     Uri? redirectUriOverride,
     Uri? originalUri,
     List<String>? scopeOverride,
@@ -286,6 +292,7 @@ class OidcUserManager {
     );
     return _tryGetAuthResponse(
       request: request,
+      authorizationType: type,
       grantType: OidcConstants_GrantType.implicit,
       options: options,
     );
@@ -1091,7 +1098,7 @@ class OidcUserManager {
   ///
   Future<OidcUser?> _reAuthorizeUser() async {
     try {
-      final user = await loginAuthorizationCodeFlow(
+      final user = await initializeAuthorizationCodeFlow(
         promptOverride: ['none'],
         options: const OidcPlatformSpecificOptions(
           web: OidcPlatformSpecificOptions_Web(

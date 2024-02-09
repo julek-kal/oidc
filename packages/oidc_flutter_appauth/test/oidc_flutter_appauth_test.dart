@@ -76,6 +76,7 @@ void main() {
             test('getAuthorizationResponse', () async {
               final response = await oidc.getAuthorizationResponse(
                 metadata,
+                AuthorizationType.login,
                 OidcAuthorizeRequest(
                   responseType: ['code'],
                   clientId: 'someClientId',
